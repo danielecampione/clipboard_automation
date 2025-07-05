@@ -8,6 +8,9 @@ This Java 1.8 project with JavaFX automates the use of multiple clipboard items 
 3. Pastes clipboard items in reverse order, for the number of items specified by the user
 4. Optionally adds line breaks at the end of each pasted item
 
+## Screenshot
+![Png](https://i.ibb.co/3mtXcdNJ/Immagine-2025-07-05-143113.png)
+
 ## Prerequisites
 - Microsoft Windows 11 or 10 with Clipboard History feature already enabled
 - Java 1.8 with JavaFX
@@ -46,6 +49,9 @@ Questo progetto Java 1.8 con JavaFX automatizza l'utilizzo degli appunti multipl
 3. Incolla gli elementi degli appunti nell'ordine inverso, per il numero di elementi definito dall'utente
 4. Aggiunge automaticamente interruzioni di riga al termine, se richiesto dall'utente
 
+## Schermata catturata
+![Png](https://i.ibb.co/3mtXcdNJ/Immagine-2025-07-05-143113.png)
+
 ## Prerequisiti
 - Sistema operativo Microsoft Windows 11 o 10 con la funzionalità "Cronologia Appunti" già attiva
 - Java 1.8 con JavaFX
@@ -82,6 +88,9 @@ Questo progetto Java 1.8 con JavaFX automatizza l'utilizzo degli appunti multipl
 2. 使用 Win+V 打开 Windows 剪贴板历史记录界面
 3. 将剪贴板中的内容按照用户设定的数量，倒序粘贴
 4. 可选功能：在每个粘贴项后添加换行符
+
+## 屏幕截图
+![Png](https://i.ibb.co/3mtXcdNJ/Immagine-2025-07-05-143113.png)
 
 ## 先决条件
 - 启用了“剪贴板历史记录”功能的 Microsoft Windows 11 或 10
