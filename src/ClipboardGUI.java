@@ -77,6 +77,12 @@ public class ClipboardGUI extends Application {
             
             root.getChildren().addAll(titleLabel, instructionLabel, configPanel, startButton, statusLabel);
             
+            // Centra il VBox root nel mainPane
+            root.layoutBoundsProperty().addListener((obs, oldBounds, newBounds) -> {
+                root.setLayoutX((500 - newBounds.getWidth()) / 2);
+                root.setLayoutY((400 - newBounds.getHeight()) / 2);
+            });
+            
             // Crea il pannello delle bolle sopra tutto
             bubblePane = new Pane();
             bubblePane.setPrefSize(500, 400);
@@ -141,6 +147,20 @@ public class ClipboardGUI extends Application {
         elementsSpinner.setEditable(true);
         elementsSpinner.setPrefWidth(80);
         elementsSpinner.setStyle("-fx-background-radius: 5px; -fx-border-radius: 5px;");
+        
+        // Aggiunge listener per aggiornare il valore quando viene digitato manualmente
+        elementsSpinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
+            if (newValue != null && !newValue.isEmpty()) {
+                try {
+                    int value = Integer.parseInt(newValue);
+                    if (value >= 1 && value <= 20) {
+                        elementsSpinner.getValueFactory().setValue(value);
+                    }
+                } catch (NumberFormatException e) {
+                    // Ignora valori non numerici
+                }
+            }
+        });
         
         // CheckBox per il separatore
         separatorCheckBox = new CheckBox("Aggiungi separatore \"---\" alla fine");
