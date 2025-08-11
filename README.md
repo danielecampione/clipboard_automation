@@ -9,7 +9,7 @@ This Java 1.8 project with JavaFX automates the use of multiple clipboard items 
 4. Optionally adds line breaks at the end of each pasted item
 
 ## Screenshot
-![Png](https://i.ibb.co/3mtXcdNJ/Immagine-2025-07-05-143113.png)
+![Png](https://i.ibb.co/CK0BZL1J/Immagine-2025-08-11-224317.png)
 
 ## Prerequisites
 - Microsoft Windows 11 or 10 with Clipboard History feature already enabled
@@ -50,7 +50,7 @@ Questo progetto Java 1.8 con JavaFX automatizza l'utilizzo degli appunti multipl
 4. Aggiunge automaticamente interruzioni di riga al termine, se richiesto dall'utente
 
 ## Schermata catturata
-![Png](https://i.ibb.co/3mtXcdNJ/Immagine-2025-07-05-143113.png)
+![Png](https://i.ibb.co/CK0BZL1J/Immagine-2025-08-11-224317.png)
 
 ## Prerequisiti
 - Sistema operativo Microsoft Windows 11 o 10 con la funzionalità "Cronologia Appunti" già attiva
@@ -90,7 +90,7 @@ Questo progetto Java 1.8 con JavaFX automatizza l'utilizzo degli appunti multipl
 4. 可选功能：在每个粘贴项后添加换行符
 
 ## 屏幕截图
-![Png](https://i.ibb.co/3mtXcdNJ/Immagine-2025-07-05-143113.png)
+![Png](https://i.ibb.co/CK0BZL1J/Immagine-2025-08-11-224317.png)
 
 ## 先决条件
 - 启用了“剪贴板历史记录”功能的 Microsoft Windows 11 或 10
