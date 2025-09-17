@@ -13,10 +13,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -36,6 +40,9 @@ public class ClipboardGUI extends Application {
     private ClipboardAutomation automation;
     private Button startButton;
     private Label statusLabel;
+    private Label titleLabel;
+    private Label instructionLabel;
+    private Label elementsLabel;
     private Spinner<Integer> elementsSpinner;
     private CheckBox separatorCheckBox;
     private CheckBox specialEffectsCheckBox;
@@ -44,6 +51,11 @@ public class ClipboardGUI extends Application {
     private List<Circle> bubbles;
     private Timeline bubbleAnimation;
     private Random random;
+    private I18nManager i18n = I18nManager.getInstance();
+    private MenuBar menuBar;
+    private Menu languageMenu;
+    private MenuItem italianMenuItem;
+    private MenuItem englishMenuItem;
     
     @Override
     public void start(Stage primaryStage) {
@@ -55,10 +67,17 @@ public class ClipboardGUI extends Application {
             // Inizializza l'automazione
             automation = new ClipboardAutomation();
             
+            // Crea la menu bar
+            createMenuBar();
+            
             // Crea i componenti dell'interfaccia
             createComponents();
             
-            // Configura il layout
+            // Configura il layout principale
+            BorderPane mainLayout = new BorderPane();
+            mainLayout.setTop(menuBar);
+            
+            // Configura il layout centrale
             Pane mainPane = new Pane();
             
             VBox root = new VBox(20);
@@ -66,10 +85,10 @@ public class ClipboardGUI extends Application {
             root.setPadding(new Insets(30));
             root.setStyle("-fx-background-color: #f8f9fa;");
             
-            Label titleLabel = new Label("Automazione Appunti");
+            titleLabel = new Label(i18n.getText("title.label"));
             titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
             
-            Label instructionLabel = new Label("Configura i parametri e assicurati di avere abbastanza elementi\nnegli appunti di sistema prima di avviare l'automazione.");
+            instructionLabel = new Label(i18n.getText("instruction.label"));
             instructionLabel.setStyle("-fx-text-alignment: center; -fx-text-fill: #34495e;");
             
             // Crea il pannello di configurazione
@@ -92,10 +111,11 @@ public class ClipboardGUI extends Application {
             bubblePane.setLayoutY(0);
             
             mainPane.getChildren().addAll(root, bubblePane);
+            mainLayout.setCenter(mainPane);
             
             // Configura la scena
-            Scene scene = new Scene(mainPane, 500, 400);
-            primaryStage.setTitle("Clipboard Automation");
+            Scene scene = new Scene(mainLayout, 500, 430); // Aumenta altezza per il menu
+            primaryStage.setTitle(i18n.getText("window.title"));
             primaryStage.setScene(scene);
             primaryStage.setResizable(false);
             
@@ -114,7 +134,7 @@ public class ClipboardGUI extends Application {
             applyComponentEffects();
             
         } catch (Exception e) {
-            showErrorDialog("Errore di inizializzazione", "Impossibile inizializzare l'automazione: " + e.getMessage());
+            showErrorDialog(i18n.getText("error.init.title"), i18n.getText("error.init.message") + e.getMessage());
         }
     }
     
@@ -122,7 +142,7 @@ public class ClipboardGUI extends Application {
      * Crea i componenti dell'interfaccia
      */
     private void createComponents() {
-        startButton = new Button("Avvia Automazione");
+        startButton = new Button(i18n.getText("start.button"));
         startButton.setStyle("-fx-font-size: 14px; -fx-padding: 15px 30px; " +
                             "-fx-background-color: #27ae60; -fx-text-fill: white; " +
                             "-fx-background-radius: 25px; -fx-border-radius: 25px; " +
@@ -137,7 +157,7 @@ public class ClipboardGUI extends Application {
         shadow.setRadius(5);
         startButton.setEffect(shadow);
         
-        statusLabel = new Label("Pronto per l'automazione");
+        statusLabel = new Label(i18n.getText("status.ready"));
         statusLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-font-size: 12px;");
         
         // Spinner per il numero di elementi
@@ -163,12 +183,12 @@ public class ClipboardGUI extends Application {
         });
         
         // CheckBox per il separatore
-        separatorCheckBox = new CheckBox("Aggiungi separatore \"---\" alla fine");
+        separatorCheckBox = new CheckBox(i18n.getText("separator.checkbox"));
         separatorCheckBox.setSelected(true);
         separatorCheckBox.setStyle("-fx-text-fill: #2c3e50;");
         
         // CheckBox per gli effetti speciali
-        specialEffectsCheckBox = new CheckBox("Effetti speciali");
+        specialEffectsCheckBox = new CheckBox(i18n.getText("effects.checkbox"));
         specialEffectsCheckBox.setSelected(true);
         specialEffectsCheckBox.setStyle("-fx-text-fill: #8e44ad; -fx-font-weight: bold;");
         specialEffectsCheckBox.setOnAction(e -> toggleSpecialEffects());
@@ -195,7 +215,7 @@ public class ClipboardGUI extends Application {
         // Riga per il numero di elementi
         HBox elementsRow = new HBox(10);
         elementsRow.setAlignment(Pos.CENTER);
-        Label elementsLabel = new Label("Numero di elementi da incollare:");
+        elementsLabel = new Label(i18n.getText("elements.label"));
         elementsLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #2c3e50;");
         elementsRow.getChildren().addAll(elementsLabel, elementsSpinner);
         
@@ -219,7 +239,7 @@ public class ClipboardGUI extends Application {
     private void startAutomation() {
         // Disabilita il pulsante durante l'esecuzione
         startButton.setDisable(true);
-        statusLabel.setText("Automazione in corso...");
+        statusLabel.setText(i18n.getText("status.running"));
         statusLabel.setStyle("-fx-text-fill: orange; -fx-font-weight: bold;");
         
         // Esegue l'automazione in un thread separato per non bloccare l'interfaccia
@@ -237,7 +257,7 @@ public class ClipboardGUI extends Application {
                 
                 // Aggiorna l'interfaccia nel thread JavaFX
                 javafx.application.Platform.runLater(() -> {
-                    statusLabel.setText("Automazione completata con successo!");
+                    statusLabel.setText(i18n.getText("status.completed"));
                     statusLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
                     startButton.setDisable(false);
                 });
@@ -245,16 +265,63 @@ public class ClipboardGUI extends Application {
             } catch (Exception ex) {
                 // Gestisce gli errori
                 javafx.application.Platform.runLater(() -> {
-                    statusLabel.setText("Errore durante l'automazione");
+                    statusLabel.setText(i18n.getText("status.error"));
                     statusLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
                     startButton.setDisable(false);
-                    showErrorDialog("Errore di automazione", "Si è verificato un errore: " + ex.getMessage());
+                    showErrorDialog(i18n.getText("error.automation.title"), i18n.getText("error.automation.message") + ex.getMessage());
                 });
             }
         });
         
         automationThread.setDaemon(true);
         automationThread.start();
+    }
+    
+    /**
+     * Crea la menu bar con il menu lingua
+     */
+    private void createMenuBar() {
+        menuBar = new MenuBar();
+        languageMenu = new Menu(i18n.getText("menu.language"));
+        
+        italianMenuItem = new MenuItem(i18n.getText("menu.italian"));
+        englishMenuItem = new MenuItem(i18n.getText("menu.english"));
+        
+        italianMenuItem.setOnAction(e -> {
+            i18n.setLanguage("it");
+            updateAllTexts();
+        });
+        
+        englishMenuItem.setOnAction(e -> {
+            i18n.setLanguage("en");
+            updateAllTexts();
+        });
+        
+        languageMenu.getItems().addAll(italianMenuItem, englishMenuItem);
+        menuBar.getMenus().add(languageMenu);
+    }
+    
+    /**
+     * Aggiorna tutti i testi dell'interfaccia con la lingua corrente
+     */
+    private void updateAllTexts() {
+        primaryStage.setTitle(i18n.getText("window.title"));
+        titleLabel.setText(i18n.getText("title.label"));
+        instructionLabel.setText(i18n.getText("instruction.label"));
+        elementsLabel.setText(i18n.getText("elements.label"));
+        separatorCheckBox.setText(i18n.getText("separator.checkbox"));
+        specialEffectsCheckBox.setText(i18n.getText("effects.checkbox"));
+        startButton.setText(i18n.getText("start.button"));
+        
+        // Aggiorna il messaggio di stato solo se è quello di default
+        String currentStatus = statusLabel.getText();
+        if (currentStatus.equals("Pronto per l'automazione") || currentStatus.equals("Ready for automation")) {
+            statusLabel.setText(i18n.getText("status.ready"));
+        }
+        
+        languageMenu.setText(i18n.getText("menu.language"));
+        italianMenuItem.setText(i18n.getText("menu.italian"));
+        englishMenuItem.setText(i18n.getText("menu.english"));
     }
     
     /**
