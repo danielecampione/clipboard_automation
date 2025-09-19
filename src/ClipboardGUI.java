@@ -78,8 +78,6 @@ public class ClipboardGUI extends Application {
             mainLayout.setTop(menuBar);
             
             // Configura il layout centrale
-            Pane mainPane = new Pane();
-            
             VBox root = new VBox(20);
             root.setAlignment(Pos.CENTER);
             root.setPadding(new Insets(30));
@@ -96,21 +94,19 @@ public class ClipboardGUI extends Application {
             
             root.getChildren().addAll(titleLabel, instructionLabel, configPanel, startButton, statusLabel);
             
-            // Centra il VBox root nel mainPane
-            root.layoutBoundsProperty().addListener((obs, oldBounds, newBounds) -> {
-                root.setLayoutX((500 - newBounds.getWidth()) / 2);
-                root.setLayoutY((400 - newBounds.getHeight()) / 2);
-            });
-            
             // Crea il pannello delle bolle sopra tutto
             bubblePane = new Pane();
             bubblePane.setPrefSize(500, 400);
             bubblePane.setMouseTransparent(true);
-            // Posiziona le bolle per coprire tutta la finestra
-            bubblePane.setLayoutX(0);
-            bubblePane.setLayoutY(0);
             
+            // Usa un Pane per sovrapporre le bolle al contenuto
+            Pane mainPane = new Pane();
             mainPane.getChildren().addAll(root, bubblePane);
+            
+            // Assicura che root riempia tutto lo spazio disponibile
+            root.prefWidthProperty().bind(mainPane.widthProperty());
+            root.prefHeightProperty().bind(mainPane.heightProperty());
+            
             mainLayout.setCenter(mainPane);
             
             // Configura la scena
