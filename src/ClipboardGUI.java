@@ -96,8 +96,10 @@ public class ClipboardGUI extends Application {
             
             // Crea il pannello delle bolle sopra tutto
             bubblePane = new Pane();
-            bubblePane.setPrefSize(500, 400);
+            bubblePane.setPrefSize(500, 370); // Ridotta altezza per escludere la menu bar
             bubblePane.setMouseTransparent(true);
+            // Posiziona le bolle sotto la menu bar per evitare interferenze
+            bubblePane.setLayoutY(30); // Offset per evitare la menu bar
             
             // Usa un Pane per sovrapporre le bolle al contenuto
             Pane mainPane = new Pane();
@@ -110,7 +112,7 @@ public class ClipboardGUI extends Application {
             mainLayout.setCenter(mainPane);
             
             // Configura la scena
-            Scene scene = new Scene(mainLayout, 500, 430); // Aumenta altezza per il menu
+            Scene scene = new Scene(mainLayout, 500, 460); // Aumenta altezza per rendere visibile la menu bar
             primaryStage.setTitle(i18n.getText("window.title"));
             primaryStage.setScene(scene);
             primaryStage.setResizable(false);
@@ -185,7 +187,7 @@ public class ClipboardGUI extends Application {
         
         // CheckBox per gli effetti speciali
         specialEffectsCheckBox = new CheckBox(i18n.getText("effects.checkbox"));
-        specialEffectsCheckBox.setSelected(true);
+        specialEffectsCheckBox.setSelected(false); // Disattivato di default
         specialEffectsCheckBox.setStyle("-fx-text-fill: #8e44ad; -fx-font-weight: bold;");
         specialEffectsCheckBox.setOnAction(e -> toggleSpecialEffects());
     }
@@ -356,14 +358,14 @@ public class ClipboardGUI extends Application {
         bubble.setRadius(random.nextDouble() * 8 + 3); // Raggio tra 3 e 11
         bubble.setFill(Color.rgb(52, 152, 219, 0.3 + random.nextDouble() * 0.4));
         bubble.setCenterX(random.nextDouble() * 500);
-        bubble.setCenterY(400 + bubble.getRadius());
+        bubble.setCenterY(370 + bubble.getRadius()); // Inizia dal fondo dell'area ridotta
         
         bubblePane.getChildren().add(bubble);
         bubbles.add(bubble);
         
-        // Animazione di movimento verso l'alto
+        // Animazione di movimento verso l'alto - limitata all'area disponibile
         TranslateTransition moveUp = new TranslateTransition(Duration.seconds(3 + random.nextDouble() * 2), bubble);
-        moveUp.setToY(-450 - bubble.getRadius());
+        moveUp.setToY(-370 - bubble.getRadius()); // Si ferma prima della menu bar
         
         // Animazione di oscillazione orizzontale
         TranslateTransition sway = new TranslateTransition(Duration.seconds(1 + random.nextDouble()), bubble);
@@ -378,7 +380,13 @@ public class ClipboardGUI extends Application {
         scale.setCycleCount(Timeline.INDEFINITE);
         scale.setAutoReverse(true);
         
-        ParallelTransition bubbleAnim = new ParallelTransition(moveUp, sway, scale);
+        // Animazione di dissolvenza che inizia quando la bolla raggiunge il 70% del percorso
+        FadeTransition fade = new FadeTransition(Duration.seconds(1.5), bubble);
+        fade.setFromValue(1.0);
+        fade.setToValue(0.0);
+        fade.setDelay(Duration.seconds((3 + random.nextDouble() * 2) * 0.7)); // Inizia al 70% del movimento
+        
+        ParallelTransition bubbleAnim = new ParallelTransition(moveUp, sway, scale, fade);
         bubbleAnim.setOnFinished(e -> {
             bubblePane.getChildren().remove(bubble);
             bubbles.remove(bubble);
